@@ -1,5 +1,7 @@
 # Retro Winnipeg Weather Channel
 # By probnot
+# Updates for Edmonton weather
+# By ehushagen
 # code is scrounged together, please be kind
 
 from tkinter import *
@@ -45,7 +47,7 @@ def weather_page():
             month = datetime.datetime.today().month
             tendency = ec_en.conditions["tendency"]["value"]
             TENDENCY = tendency.upper()
-            s1 = " WINNIPEG - " + days[day] + ", " + months[month] + ". " + datetime.datetime.now().strftime("%d/%Y")
+            s1 = " EDMONTON - " + days[day] + ", " + months[month] + ". " + datetime.datetime.now().strftime("%d/%Y")
             s2 = " "
             s3 = "TEMP " + ec_en.conditions["temperature"]["value"] + "C (FEELS LIKE " + ec_en.conditions["wind_chill"]["value"] + "C)"
             s4 = ".. AND " + TENDENCY
@@ -102,7 +104,7 @@ def weather_page():
 
 root = Tk()
 root.attributes('-fullscreen',True)
-root.geometry("720x480")
+root.geometry("720x480") # EBH - tried changing to native 2160x1440. Crashed.
 root.config(cursor="none", bg="green")
 root.wm_title("wpg-weatherchan_V0.0.12")
 
@@ -119,7 +121,7 @@ Title.place(x=80, y=55)
 
 # use ECData to gather weather data, station_id is from the csv file provided with ECDada -- homepage: https://github.com/michaeldavie/env_canada
 
-ec_en = ECData(station_id='MB/s0000193', language='english')
+ec_en = ECData(station_id='AB/s0000045', language='english')
 ec_en.update()
 
 # Middle Section (Cycling weather pages, every 30sec)
@@ -140,6 +142,8 @@ for r in range(width): #create an empty string of 35 characters
     pad = pad + " " 
 
 url = "https://winnipeg.ca/interhom/RSS/RSSNewsTopTen.xml"
+# EBH - using CBC Edmonton rss hecked everything up. Revert to winnipeg for now. Pretty sure
+# will just need small edits to below
 wpg = feedparser.parse(url)
 
 # use the first 8 entries on the wpg news RSS feed
