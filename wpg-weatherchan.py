@@ -103,10 +103,10 @@ def weather_page():
 # setup main stuff
 
 root = Tk()
-root.attributes('-fullscreen',True)
-root.geometry("720x480") # EBH - tried changing to native 2160x1440. Crashed.
+root.attributes('-fullscreen',False)
+root.geometry("720x480")
 root.config(cursor="none", bg="green")
-root.wm_title("wpg-weatherchan_V0.0.12")
+root.wm_title("edm-weatherchan_V0.0.1")
 
 # Clock - Top RIGHT
 
@@ -119,7 +119,7 @@ clock()
 Title = Label(root, text="ENVIRONMENT CANADA", font=("VCR OSD Mono", 22), fg="white", bg="green")
 Title.place(x=80, y=55)
 
-# use ECData to gather weather data, station_id is from the csv file provided with ECDada -- homepage: https://github.com/michaeldavie/env_canada
+# use ECData to gather weather data, station_id is from the csv file provided with ECData -- homepage: https://github.com/michaeldavie/env_canada
 
 ec_en = ECData(station_id='AB/s0000045', language='english')
 ec_en.update()
@@ -141,6 +141,7 @@ pad = ""
 for r in range(width): #create an empty string of 35 characters
     pad = pad + " " 
 
+# url = "https://edmonton.ctvnews.ca/rss/"
 url = "https://winnipeg.ca/interhom/RSS/RSSNewsTopTen.xml"
 # EBH - using CBC Edmonton rss hecked everything up. Revert to winnipeg for now. Pretty sure
 # will just need small edits to below
@@ -148,6 +149,10 @@ wpg = feedparser.parse(url)
 
 # use the first 8 entries on the wpg news RSS feed
 wpg_desc = wpg.entries[0]["description"] + pad + wpg.entries[1]["description"] + pad + wpg.entries[2]["description"] + pad + wpg.entries[3]["description"] + pad + wpg.entries[4]["description"] + pad + wpg.entries[5]["description"] + pad + wpg.entries[6]["description"] + pad + wpg.entries[7]["description"]
+
+# Trying to strip the <img> tags that cbc news uses but it is not working
+# feedparser._HTMLSanitizer.acceptable_elements = feedparser._HTMLSanitizer.acceptable_elements.remove('img')
+
 mrq_msg = wpg_desc.upper()
 
 # use the length of the news feeds to determine the total pixels in the scrolling section
